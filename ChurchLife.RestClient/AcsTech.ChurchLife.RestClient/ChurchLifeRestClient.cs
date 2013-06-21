@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using RestSharp;
 
 namespace AcsTech.ChurchLife.RestClient
 {
@@ -28,7 +30,7 @@ namespace AcsTech.ChurchLife.RestClient
         /// <param name="searchField"></param>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
-        /// <returns></returns>
+        /// <retu``rns></returns>
         public PagedList<IndividualProxy> IndividualsIndex(string searchField, int pageIndex = 0, int pageSize = 0)
         {
             // this sould be a helper so it is just one line
@@ -37,25 +39,17 @@ namespace AcsTech.ChurchLife.RestClient
                 pageSize = DefaultPageSize;
             }
 
-            var result = new PagedList<IndividualProxy>();
-            /*
-             {
-                "Page": [
-                    {
-                        "IndvId": 76,
-                        "FamId": 1042,
-                        "FamilyPosition": "Head",
-                        "FriendlyName": "James(Jim) Aaron",
-                        "FullName": "Aaron, James (Jim)",
-                        "PictureUrl": "https://accesspict/14447/12704_11_PMT.jpg"
-                    }
-                ],
-                "PageCount": 23,
-                "PageIndex": 0,
-                "PageSize": 1 
-             } 
-             */
-            return result;
+            var client = new RestSharp.RestClient("https://api.accessacs.com/v2");
+            client.Authenticator = new HttpBasicAuthenticator(Username, Password);
+            client.AddDefaultHeader("Sitenumber", SiteNumber.ToString());
+
+            var request = new RestSharp.RestRequest("individuals", Method.GET);
+            request.AddParameter("searchField", searchField);
+            request.AddParameter("pageIndex", pageIndex);
+            request.AddParameter("pageSize", pageSize);
+            
+            var response = client.Execute<PagedList<IndividualProxy>>(request);
+            return response.Data;
         }
 
         /*
@@ -80,8 +74,9 @@ namespace AcsTech.ChurchLife.RestClient
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PagedList<T> : List<T>
+    public class PagedList<T>
     {
+        public List<T> Page { get; set; }
         public int PageCount { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
@@ -93,11 +88,11 @@ namespace AcsTech.ChurchLife.RestClient
     public class IndividualProxy
     {
         public int IndvId { get; set; }
-        //"FamId": 1042,
-        //"FamilyPosition": "Head",
+        public int FamId { get; set; }
+        public string FamilyPosition { get; set; }
         public string FriendlyName { get; set; }
-        //"FullName": "Aaron, James (Jim)",
-        //"PictureUrl": "https://accesspict/14447/12704_11_PMT.jpg" 
+        public string FullName { get; set; }
+        public Uri PictureUrl { get; set; }
     }
 
     #endregion

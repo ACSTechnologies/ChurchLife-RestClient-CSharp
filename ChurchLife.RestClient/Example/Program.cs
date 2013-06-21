@@ -16,7 +16,7 @@ namespace Example
             var individuals = restClient.IndividualsIndex("Smith");
 
             
-            individuals.ForEach(i =>
+            individuals.Page.ForEach(i =>
                 {
                     Console.WriteLine(i.FriendlyName);        
                 });

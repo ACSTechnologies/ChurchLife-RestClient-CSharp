@@ -19,7 +19,7 @@ namespace Example
             
             individuals.Page.ForEach(i =>
                 {
-                    Console.WriteLine(i.FriendlyName);        
+                    Console.WriteLine(i.FirstName +" " + i.LastName);        
                 });
             Console.WriteLine("\nEvents:");
             var events = restClient.EventsIndex(DateTime.Today, DateTime.Today.AddDays(14));

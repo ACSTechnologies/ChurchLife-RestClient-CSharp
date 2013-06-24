@@ -21,17 +21,16 @@ namespace AcsTech.ChurchLife.RestClient
 
         #region Individuals
 
-        //https://api.accessacs.com/v2/individuals?searchField=<last name, goes-by name, or first name>&pageIndex=<0>&pageSize=<int>
-
+        //https://secure.accessacs.com/api_accessacs_mobile/v2/individuals?q=<*querystring>&pageIndex=<0-based int>&pageSize=<int>
         /// <summary>
         /// Returns a list of individuals the user has rights to view.
         /// http://wiki.acstechnologies.com/display/DevCom/Individuals
         /// </summary>
-        /// <param name="searchField">Search the criteria entered; includes last name, goes-by name, and first name.</param>
-        /// <param name="pageIndex"></param>
-        /// <param name="pageSize"></param>
+        /// <param name="q">Query string. Required for API to work.</param>
+        /// <param name="pageIndex">Page number for the search results; begins with the 0 value entered for the first set of results.</param>
+        /// <param name="pageSize">Number of results to return per page.</param>
         /// <returns></returns>
-        public PagedList<IndividualProxy> IndividualsIndex(string searchField, int pageIndex = 0, int pageSize = 0)
+        public PagedList<IndividualProxy> IndividualsIndex(string q, int pageIndex = 0, int pageSize = 0)
         {
             // this sould be a helper so it is just one line
             if (pageSize == 0)
@@ -39,12 +38,13 @@ namespace AcsTech.ChurchLife.RestClient
                 pageSize = DefaultPageSize;
             }
 
-            var client = new RestSharp.RestClient("https://api.accessacs.com/v2");
+            var client = new RestSharp.RestClient("https://secure.accessacs.com/api_accessacs_mobile/v2");
             client.Authenticator = new HttpBasicAuthenticator(Username, Password);
             client.AddDefaultHeader("Sitenumber", SiteNumber.ToString());
 
-            var request = new RestSharp.RestRequest("individuals", Method.GET);
-            request.AddParameter("searchField", searchField);
+            var request = new RestSharp.RestRequest("{sitenumber}/individuals", Method.GET);
+            request.AddUrlSegment("sitenumber", SiteNumber.ToString());
+            request.AddParameter("q", q);
             request.AddParameter("pageIndex", pageIndex);
             request.AddParameter("pageSize", pageSize);
             
@@ -122,8 +122,9 @@ namespace AcsTech.ChurchLife.RestClient
         public int IndvId { get; set; }
         public int FamId { get; set; }
         public string FamilyPosition { get; set; }
-        public string FriendlyName { get; set; }
-        public string FullName { get; set; }
+        public string Title { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public Uri PictureUrl { get; set; }
     }
 

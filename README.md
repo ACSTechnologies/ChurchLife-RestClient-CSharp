@@ -16,5 +16,5 @@ Alternatively if you have installed [RestSharp](http://nuget.org/packages/RestSh
 
 Dependencies
 ------------
-The client uses [RestSharp](http://nuget.org/packages/RestSharp)which can be installed as a NuGet package
+The client uses [RestSharp](http://nuget.org/packages/RestSharp) which can be installed as a NuGet package
 

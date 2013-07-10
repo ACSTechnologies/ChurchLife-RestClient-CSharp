@@ -21,7 +21,7 @@ namespace AcsTech.ChurchLife.RestClient
 
         #region Individuals
 
-        //https://secure.accessacs.com/api_accessacs_mobile/v2/individuals?q=<*querystring>&pageIndex=<0-based int>&pageSize=<int>
+        //https://secure.accessacs.com/api_accessacs_mobile/v2/<sitenumber>/individuals?q=<*querystring>&pageIndex=<0-based int>&pageSize=<int>
         /// <summary>
         /// Returns a list of individuals the user has rights to view.
         /// http://wiki.acstechnologies.com/display/DevCom/Individuals
@@ -125,6 +125,9 @@ namespace AcsTech.ChurchLife.RestClient
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public string GoesByName { get; set; }
+        public string Suffix { get; set; }
         public Uri PictureUrl { get; set; }
     }
 
